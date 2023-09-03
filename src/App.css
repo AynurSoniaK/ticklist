@@ -1,0 +1,35 @@
+body {
+    margin: 0px;
+    padding: 0;
+    background-color:lavender;
+}
+
+.container {
+    display: flex; 
+    align-items: center;
+    justify-content: center ;
+    height: 100vh
+}
+
+.header {
+    display: flex;
+}
+
+h1 {
+    margin: 0;
+}
+
+.quote {
+    font-style: italic;
+}
+
+.quote p {
+    margin: 10px 0 0 0;
+    font-style: italic;
+}
+
+.quote span {
+    margin: 0;
+    font-style: normal;
+}
+
