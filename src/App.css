@@ -12,8 +12,7 @@ body {
 }
 
 .button-gradient {
-    background: linear-gradient(90deg, rgba(163,111,135,1) 0%, rgba(187,240,188,1) 89%);
-    color: white;
+    background: linear-gradient(90deg, rgba(253, 202, 138) 0%, rgba(187,240,188,1) 89%);
 }
 
 .header {

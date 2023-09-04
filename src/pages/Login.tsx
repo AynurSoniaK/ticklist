@@ -19,17 +19,30 @@ function Login() {
           Connexion
         </Typography>
         <form>
-          <TextField
-            label="Nom d'utilisateur"
-            variant="outlined"
-            size="small"
-          />
-          <TextField
-            label="Mot de passe"
-            type="password"
-            variant="outlined"
-            size="small"
-          />
+          <Box marginBottom={3} sx={{ borderRadius: "15px"}}>
+            <TextField
+              label="Nom d'utilisateur"
+              variant="outlined"
+              size="small"
+            />
+          </Box>
+          <Box marginBottom={3}>
+            <TextField
+              label="Email"
+              type="password"
+              variant="outlined"
+              size="small"
+            />
+          </Box>
+          <Box marginBottom={3} borderRadius="20px">
+            <TextField
+              label="Mot de passe"
+              type="password"
+              variant="outlined"
+              size="small"
+              sx= {{ borderRadius: "15px", border: "1px solid red", }}
+            />
+          </Box>
         </form>
         <Box margin={3}>
           <Button variant="contained" color="primary">

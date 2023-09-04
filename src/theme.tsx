@@ -5,7 +5,7 @@ const customPalette = {
     main: '#BBF0BC', 
   },
   secondary: {
-    main: '#A36F87',
+    main: '#FDCA8A',
   },
 };
 

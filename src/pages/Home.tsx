@@ -5,8 +5,15 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
+import { useNavigate } from 'react-router-dom';
 
 const Homepage: React.FC = () => {
+
+    const navigate = useNavigate();
+    const handleButtonClick = () => {
+        navigate('/login');
+    };
+
     return (
         <Container
             disableGutters
@@ -34,16 +41,15 @@ const Homepage: React.FC = () => {
                     />
                 </Box>
                 <Box padding="50px">
-                    <Typography variant="h4" component="h1" sx={{ margin: '16px 0' }}>
-                        Welcome
+                    <Typography variant="h4" component="h1" sx={{ margin: '16px 0' }} color="secondary">
+                        Welcome on Ticklist
                     </Typography>
                     <Typography variant="body2" component="div" sx={{ margin: '16px 0' }}>
-                        Manage your tasks easily and finally achieve daily goals.
+                        Manage your tasks easily and finally achieve daily goals
                     </Typography>
-
-                    <Button variant="contained" className="button-gradient" sx={{ m: "20px 0" }}>
+                    <Button onClick={handleButtonClick} variant="contained" className="button-gradient" sx={{ m: "20px", p: "10px 10px 10px 20px" }}>
                         Get Started
-                        <ArrowCircleRightOutlinedIcon sx={{ ml: "10px" }}></ArrowCircleRightOutlinedIcon>
+                        <ArrowCircleRightOutlinedIcon sx={{ width: "40px" }}></ArrowCircleRightOutlinedIcon>
                     </Button>
                 </Box>
             </Paper>
