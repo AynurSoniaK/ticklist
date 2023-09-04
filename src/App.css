@@ -1,14 +1,19 @@
 body {
-    margin: 0px;
+    margin: 50px;
     padding: 0;
-    background-color:lavender;
+    background-color: lavender;
 }
 
 .container {
-    display: flex; 
+    display: flex;
     align-items: center;
-    justify-content: center ;
-    height: 100vh
+    justify-content: center;
+    height: 100vh;
+}
+
+.button-gradient {
+    background: linear-gradient(90deg, rgba(163,111,135,1) 0%, rgba(187,240,188,1) 89%);
+    color: white;
 }
 
 .header {
@@ -32,4 +37,3 @@ h1 {
     margin: 0;
     font-style: normal;
 }
-

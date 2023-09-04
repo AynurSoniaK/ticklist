@@ -2,10 +2,10 @@ import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
 const customPalette = {
   primary: {
-    main: '#ff5722', 
+    main: '#BBF0BC', 
   },
   secondary: {
-    main: '#2196f3', 
+    main: '#A36F87',
   },
 };
 
