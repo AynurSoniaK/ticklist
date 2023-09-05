@@ -41,7 +41,7 @@ const Homepage: React.FC = () => {
                     />
                 </Box>
                 <Box padding="50px">
-                    <Typography variant="h4" component="h1" sx={{ margin: '16px 0' }} color="secondary">
+                    <Typography variant="h4" component="h1" sx={{ margin: '16px 0' }}>
                         Welcome on Ticklist
                     </Typography>
                     <Typography variant="body2" component="div" sx={{ margin: '16px 0' }}>

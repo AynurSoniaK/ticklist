@@ -10,20 +10,20 @@ function Login() {
   return (
     <Layout>
       <Box
-        margin={5}
         display="flex"
         alignItems="center"
         flexDirection="column"
-        justifyContent="center">
-        <Typography variant="h4" gutterBottom margin={3}>
-          Connexion
+        justifyContent="center"
+        minHeight="70vh">
+        <Typography variant="h4" component="h1" gutterBottom margin={4} color="secondary">
+          Create your profile
         </Typography>
         <form>
-          <Box marginBottom={3} sx={{ borderRadius: "15px"}}>
+          <Box marginBottom={3}>
             <TextField
               label="Nom d'utilisateur"
               variant="outlined"
-              size="small"
+              InputProps={{ sx: { borderRadius: 5 } }}
             />
           </Box>
           <Box marginBottom={3}>
@@ -31,22 +31,21 @@ function Login() {
               label="Email"
               type="password"
               variant="outlined"
-              size="small"
+              InputProps={{ sx: { borderRadius: 5 } }}
             />
           </Box>
-          <Box marginBottom={3} borderRadius="20px">
+          <Box marginBottom={3}>
             <TextField
               label="Mot de passe"
               type="password"
               variant="outlined"
-              size="small"
-              sx= {{ borderRadius: "15px", border: "1px solid red", }}
+              InputProps={{ sx: { borderRadius: 5 } }}
             />
           </Box>
         </form>
         <Box margin={3}>
-          <Button variant="contained" color="primary">
-            Se connecter
+          <Button variant="contained" color="primary" className='button-gradient' sx={{ p: "10px 20px" }}>
+            Start ticking !
           </Button>
         </Box>
       </Box>
