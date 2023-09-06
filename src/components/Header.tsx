@@ -19,7 +19,7 @@ const Header: React.FC = () => {
 
     const [isLogged, setIsLogged] = useState(false)
     const pages = ['Products', 'Pricing', 'Blog'];
-    const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+    const settings = ['Profile', 'Dashboard', 'Logout'];
 
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -40,7 +40,7 @@ const Header: React.FC = () => {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" elevation={0} sx={{ borderRadius: '20px 20px 0px 0px' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

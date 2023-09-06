@@ -8,14 +8,16 @@ interface LayoutProps {
 const LayoutNotLogged: React.FC<LayoutProps> = ({ children }) => {
     return (
         <>
-            <Container 
+            <Container
                 disableGutters
                 maxWidth="md"
-                sx={{ 
-                    bgcolor:"white",
-                    borderRadius: '20px', 
-                    }}>
-                <Container>{children}</Container>
+                sx={{
+                    bgcolor: 'white',
+                    borderRadius: '20px',
+                }}>
+                <Container disableGutters>
+                    {children}
+                </Container>
             </Container>
         </>
     );

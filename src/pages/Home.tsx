@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 import { useNavigate } from 'react-router-dom';
+import LayoutNotLogged from '../components/LayoutNotLogged';
 
 const Homepage: React.FC = () => {
 
@@ -15,13 +16,7 @@ const Homepage: React.FC = () => {
     };
 
     return (
-        <Container
-            disableGutters
-            maxWidth="md"
-            sx={{
-                bgcolor: 'white',
-                borderRadius: '20px',
-            }}>
+        <LayoutNotLogged>
             <Paper sx={{ padding: '0', textAlign: 'center', borderRadius: '20px' }}>
                 <Box sx={{
                     overflow: 'hidden',
@@ -53,7 +48,7 @@ const Homepage: React.FC = () => {
                     </Button>
                 </Box>
             </Paper>
-        </Container>
+        </LayoutNotLogged>
     );
 };
 
