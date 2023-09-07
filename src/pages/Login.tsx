@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LayoutNotLogged from '../components/LayoutNotLogged';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -7,39 +7,49 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 function Login() {
 
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const initialFormData = {
+    email: '',
+    password: '',
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const navigate = useNavigate();
   const handleButtonClick = () => {
-    navigate('/');
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+    navigate('/register');
   };
 
   const auth = getAuth();
 
-  const handleSignup = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
-  };
+  const handleSignin = async () => {
 
+    if (!formData.email || !formData.password) return;
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth, formData.email, formData.password
+      );
+      const user = auth.currentUser;
+
+      if (user) {
+        navigate('/dashboard');
+      } 
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <LayoutNotLogged>
@@ -47,41 +57,38 @@ function Login() {
         <ArrowCircleLeftOutlinedIcon></ArrowCircleLeftOutlinedIcon>
       </Box>
       <Box
-        padding="40px"
+        padding="20px"
         display="flex"
         alignItems="center"
         flexDirection="column"
         justifyContent="center"
         minHeight="70vh">
-        <Typography variant="h4" component="h1" gutterBottom margin={5} sx={{ textTransform: 'uppercase' }}>
-          Create your profile
+        <Typography variant="h4" component="h1" gutterBottom marginBottom={5} sx={{ textTransform: 'uppercase' }}>
+          Welcome Back
         </Typography>
         <form>
-          <Box marginBottom={3}>
-            <TextField
-              placeholder="SoniaK"
-              variant="outlined"
-              InputProps={{ sx: { borderRadius: 5 } }}
-            />
-          </Box>
           <Box marginBottom={3}>
             <TextField
               placeholder="soniak@gmail.com"
               type="email"
               variant="outlined"
               InputProps={{ sx: { borderRadius: 5 } }}
-              value={email}
-              onChange={handleEmailChange}
+              value={formData.email}
+              onChange={handleInputChange}
+              name="email"
+              autoComplete="off"
             />
           </Box>
           <Box marginBottom={3}>
             <TextField
-              placeholder="************"
+              placeholder="******"
               type="password"
               variant="outlined"
               InputProps={{ sx: { borderRadius: 5 } }}
-              value={password}
-              onChange={handlePasswordChange}
+              value={formData.password}
+              onChange={handleInputChange}
+              name="password"
+              autoComplete="new-password"
             />
           </Box>
           <Divider sx={{ padding: "20px" }}>OR</Divider>
@@ -105,9 +112,12 @@ function Login() {
           />
         </Box>
         <Box margin={3}>
-          <Button variant="contained" color="primary" className='button-gradient' sx={{ p: "10px 20px" }} onClick={handleSignup}>
-            Start ticking
+          <Button variant="contained" color="primary" className='button-gradient' sx={{ p: "10px 20px", borderRadius: "20px" }} onClick={handleSignin}>
+            Log in
           </Button>
+        </Box>
+        <Box>
+          <Typography variant="caption">By continuing, you agree to our terms.</Typography>
         </Box>
       </Box>
     </LayoutNotLogged>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import Home from './pages/Home'
+import Register from './pages/Register'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import {
@@ -14,6 +15,7 @@ function App(): JSX.Element {
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/Register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
       {/* <Route path="/profile" element={token ? <Profile /> : <Login />} />

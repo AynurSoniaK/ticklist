@@ -12,7 +12,7 @@ const Homepage: React.FC = () => {
 
     const navigate = useNavigate();
     const handleButtonClick = () => {
-        navigate('/login');
+        navigate('/register');
     };
 
     return (

@@ -12,7 +12,11 @@ body {
 }
 
 .button-gradient {
-    background: linear-gradient(90deg, rgba(253, 202, 138) 0%, rgba(187,240,188,1) 89%);
+    background: linear-gradient(90deg, rgba(218, 176, 4) 0%, rgba(187,240,188,1) 89%);
+}
+
+.button-gradient:hover {
+    background: linear-gradient(90deg, rgba(187,240,188,1) 0%, rgba(218, 176, 4) 89%);
 }
 
 .header {
