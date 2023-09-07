@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import LayoutNotLogged from '../components/LayoutNotLogged';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -8,8 +8,11 @@ import Divider from '@mui/material/Divider';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { UserContext } from '../context/UserContext';
 
 function Register() {
+
+    const userContext = useContext(UserContext)
 
     const initialFormData = {
         email: '',
@@ -38,6 +41,10 @@ function Register() {
 
     const auth = getAuth();
 
+    const capitalize = (str: String) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
     const handleSignup = async () => {
 
         if (!formData.email || !formData.password || !formData.username) return;
@@ -51,9 +58,15 @@ function Register() {
         if (userCredential && user !== null) {
             try {
                 await updateProfile(user, {
-                    displayName: formData.username,
+                    displayName: capitalize(formData.username),
                     photoURL: "https://images.pexels.com/photos/4919373/pexels-photo-4919373.jpeg?auto=compress&cs=tinysrgb&w=1600"
                 });
+                const email = user?.email || ''; // Provide a default empty string if email is null
+                const username = user?.displayName || ''; // Provide a default empty string if displayName is null
+                userContext.setUser({
+                    email: email,
+                    username: username
+                  })
                 setFormData({
                     email: '',
                     password: '',

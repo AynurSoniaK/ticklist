@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import LayoutNotLogged from '../components/LayoutNotLogged';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -8,8 +8,12 @@ import Divider from '@mui/material/Divider';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { UserContext } from '../context/UserContext';
 
 function Login() {
+
+  const userContext = useContext(UserContext)
+  console.log(userContext)
 
   const initialFormData = {
     email: '',
@@ -44,6 +48,12 @@ function Login() {
       const user = auth.currentUser;
 
       if (user) {
+        const email = user?.email || ''; // Provide a default empty string if email is null
+        const username = user?.displayName || ''; // Provide a default empty string if displayName is null
+        userContext.setUser({
+            email: email,
+            username: username
+          })
         navigate('/dashboard');
       } 
     } catch (error) {

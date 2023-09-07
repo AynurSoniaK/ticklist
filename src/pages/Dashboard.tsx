@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import '../App.css'
 import axios from 'axios'
 import { app, db } from "../firebase"
 import { collection, addDoc } from "firebase/firestore"
 import theme from '../theme';
-import { Container, Box, Grid, Stack, Typography, ThemeProvider } from '@mui/material'
+import { Container, Box, Stack, Typography, ThemeProvider } from '@mui/material'
+import { UserContext } from '../context/UserContext';
 
 type Quote = {
   quote: string;
@@ -14,8 +15,8 @@ type Quote = {
 
 function Dashboard(): JSX.Element {
 
-  // Define theme mui
-
+  const userContext = useContext(UserContext)
+  console.log(userContext)
   const [quote, setQuote] = useState<Quote>({
     quote: '',
     author: '',
@@ -67,7 +68,7 @@ function Dashboard(): JSX.Element {
     };
 
     if (!quoteFetched) {
-      fetchQuote() // Initial API call
+      fetchQuote() 
     }
   }, [quoteFetched]);
 
@@ -84,7 +85,7 @@ function Dashboard(): JSX.Element {
           minWidth:"850px"
         }}>
           <Stack direction="row" spacing={3} sx={{ color: '#fff', backgroundColor: '#2196F3',}}>
-            <Typography variant='h4' component={'h1'}>Hello Aynur</Typography>
+            <Typography variant='h4' component={'h1'}>Hello {userContext.user?.username}</Typography>
             {quote.quote &&
               <Box sx={{ width: '250px' }}>
                 <Typography variant="body1" sx={{ fontStyle: 'italic' }}>"{quote.quote}"</Typography>
