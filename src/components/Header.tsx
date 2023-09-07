@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -10,14 +10,18 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Box from '@mui/material/Box';
+import { UserContext } from '../context/UserContext';
 
 // const pages = ['Dashboard', 'Statistiques', 'Profile'];
 const settings = ['Profile', 'Dashboard', 'Logout'];
+
 const Header: React.FC = () => {
 
-    const [isLogged, setIsLogged] = useState(false)
+    const userContext = useContext(UserContext)
+    console.log(userContext)
+
     const pages = ['Products', 'Pricing', 'Blog'];
     const settings = ['Profile', 'Dashboard', 'Logout'];
 
@@ -40,10 +44,10 @@ const Header: React.FC = () => {
     };
 
     return (
-        <AppBar position="static" elevation={0} sx={{ borderRadius: '20px 20px 0px 0px' }}>
-            <Container maxWidth="xl">
+        <AppBar position="static" elevation={0} sx={{ borderRadius: '20px 20px 0px 0px', minHeight: { xs: '40px', md: '70px' } }}>
+            <Container maxWidth="xl" disableGutters>
                 <Toolbar disableGutters>
-                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                    {/* <CheckCircleOutlineIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                     <Typography
                         variant="h6"
                         noWrap
@@ -52,26 +56,24 @@ const Header: React.FC = () => {
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
+                            fontFamily: 'roboto',
                             fontWeight: 700,
-                            letterSpacing: '.3rem',
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
-                    </Typography>
+                        Ticklist
+                    </Typography> */}
 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' }, margin: "0 0 0 20px" }}>
                         <IconButton
-                            size="large"
                             aria-label="account of current user"
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
                             onClick={handleOpenNavMenu}
                             color="inherit"
                         >
-                            <MenuIcon />
+                            <MenuIcon style={{ fontSize: '40px' }} />
                         </IconButton>
                         <Menu
                             id="menu-appbar"
@@ -88,17 +90,17 @@ const Header: React.FC = () => {
                             open={Boolean(anchorElNav)}
                             onClose={handleCloseNavMenu}
                             sx={{
-                                display: { xs: 'block', md: 'none' },
+                                display: { xs: 'block', md: 'block' },
                             }}
                         >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
+                            {settings.map((setting) => (
+                                <MenuItem key={setting} onClick={handleCloseNavMenu}>
+                                    <Typography textAlign="center">{setting}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+                    {/* <CheckCircleOutlineIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
                     <Typography
                         variant="h5"
                         noWrap
@@ -108,17 +110,22 @@ const Header: React.FC = () => {
                             mr: 2,
                             display: { xs: 'flex', md: 'none' },
                             flexGrow: 1,
-                            fontFamily: 'monospace',
+                            fontFamily: 'roboto',
                             fontWeight: 700,
-                            letterSpacing: '.3rem',
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {pages.map((page) => (
+                        Ticklist
+                    </Typography> */}
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' }, padding: "30px 0px" }}>
+                        <IconButton>
+                            <Avatar alt="Remy Sharp" src={userContext.user?.photo} sx={{ width: { xs: '50px', md: '80px' }, height: { xs: '50px', md: '80px' } }}/>
+                        </IconButton>
+                        <Box sx={{ display:"flex", alignItems:'center', ml:'10px'}}>
+                        <Typography variant={'h3'} component={'h1'}>Hello, {userContext.user?.username}. </Typography>
+                        </Box>
+                        {/* {pages.map((page) => (
                             <Button
                                 key={page}
                                 onClick={handleCloseNavMenu}
@@ -126,10 +133,10 @@ const Header: React.FC = () => {
                             >
                                 {page}
                             </Button>
-                        ))}
+                        ))} */}
                     </Box>
 
-                    <Box sx={{ flexGrow: 0 }}>
+                    {/* <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -157,7 +164,7 @@ const Header: React.FC = () => {
                                 </MenuItem>
                             ))}
                         </Menu>
-                    </Box>
+                    </Box> */}
                 </Toolbar>
             </Container>
         </AppBar>

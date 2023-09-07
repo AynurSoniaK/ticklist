@@ -61,11 +61,13 @@ function Register() {
                     displayName: capitalize(formData.username),
                     photoURL: "https://images.pexels.com/photos/4919373/pexels-photo-4919373.jpeg?auto=compress&cs=tinysrgb&w=1600"
                 });
-                const email = user?.email || ''; // Provide a default empty string if email is null
-                const username = user?.displayName || ''; // Provide a default empty string if displayName is null
+                const email = user?.email || ''; 
+                const username = user?.displayName || ''; 
+                const photo = user?.photoURL || ''; 
                 userContext.setUser({
                     email: email,
-                    username: username
+                    username: username,
+                    photo: photo
                   })
                 setFormData({
                     email: '',

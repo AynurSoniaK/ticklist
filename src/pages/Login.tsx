@@ -48,11 +48,14 @@ function Login() {
       const user = auth.currentUser;
 
       if (user) {
-        const email = user?.email || ''; // Provide a default empty string if email is null
-        const username = user?.displayName || ''; // Provide a default empty string if displayName is null
+        const email = user?.email || ''; 
+        const username = user?.displayName || ''; 
+        const photo = user?.photoURL || '';
+
         userContext.setUser({
             email: email,
-            username: username
+            username: username,
+            photo: photo
           })
         navigate('/dashboard');
       } 

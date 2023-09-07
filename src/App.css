@@ -23,10 +23,6 @@ body {
     display: flex;
 }
 
-h1 {
-    margin: 0;
-}
-
 .quote {
     font-style: italic;
 }
@@ -40,3 +36,4 @@ h1 {
     margin: 0;
     font-style: normal;
 }
+
