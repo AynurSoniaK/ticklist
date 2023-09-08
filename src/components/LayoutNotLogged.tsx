@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import Container from '@mui/material/Container';
 
-interface LayoutProps {
+type LayoutProps = {
     children: ReactNode;
 }
 

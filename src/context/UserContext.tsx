@@ -1,17 +1,18 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 interface AuthUser {
     email: string,
     username: string,
-    photo: string
+    photo: string,
 }
 
 export interface UserContextType {
-    user: AuthUser | null, // Use the AuthUser interface and allow null for initial state
-    setUser: React.Dispatch<React.SetStateAction<AuthUser | null>> // Use the AuthUser interface and allow null
+    user: AuthUser | null,
+    setUser: React.Dispatch<React.SetStateAction<AuthUser | null>>
 }
 
-interface UserProviderProps {
+type UserProviderProps = {
     children: ReactNode;
 }
 
@@ -20,7 +21,20 @@ export const UserContext = createContext({} as UserContextType);
 export const UserContextProvider = ({ children }: UserProviderProps) => {
     const [user, setUser] = useState<AuthUser | null>(null);
 
-    // You can include functions to update user information here
+    useEffect(() => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, (userData) => {
+            if (userData) {
+                const newUser = {
+                    uid: userData.uid,
+                    username: userData.displayName || '',
+                    photo: userData.photoURL || '',
+                    email: userData.email || '',
+                };
+                setUser(newUser);
+            }
+        });
+    }, []);
 
     return (
         <UserContext.Provider value={{ user, setUser }}>

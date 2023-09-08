@@ -13,7 +13,6 @@ import { UserContext } from '../context/UserContext';
 function Login() {
 
   const userContext = useContext(UserContext)
-  console.log(userContext)
 
   const initialFormData = {
     email: '',
@@ -48,17 +47,17 @@ function Login() {
       const user = auth.currentUser;
 
       if (user) {
-        const email = user?.email || ''; 
-        const username = user?.displayName || ''; 
+        const email = user?.email || '';
+        const username = user?.displayName || '';
         const photo = user?.photoURL || '';
 
         userContext.setUser({
-            email: email,
-            username: username,
-            photo: photo
-          })
+          email: email,
+          username: username,
+          photo: photo
+        })
         navigate('/dashboard');
-      } 
+      }
     } catch (error) {
       console.error(error);
     }

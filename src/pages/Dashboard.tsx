@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from 'react'
-import '../App.css'
 import axios from 'axios';
 import { app, db } from "../firebase"
 import { collection, addDoc } from "firebase/firestore"
@@ -11,13 +10,15 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const style = {
-  position: 'absolute' as 'absolute',
+  position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: '60%',
+  maxWidth: 300,
   bgcolor: 'background.paper',
   borderRadius: '20px',
   p: 4,
@@ -29,17 +30,26 @@ type Quote = {
   category: string;
 }
 
+type UserType = {
+  uid: string,
+  username: string,
+  photo: string,
+  email: string
+};
+
 function Dashboard(): JSX.Element {
 
   const userContext = useContext(UserContext)
-
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true)
     fetchQuote()
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setQuoteFetched(false)
+  }
 
   const category = 'success'
   const apiUrl = `https://api.api-ninjas.com/v1/quotes?category=${category}`
@@ -51,7 +61,6 @@ function Dashboard(): JSX.Element {
     category: ''
   });
   const [quoteFetched, setQuoteFetched] = useState(false);
-
 
   async function addTasks(): Promise<void> {
     try {
@@ -81,6 +90,7 @@ function Dashboard(): JSX.Element {
       if (newQuote.quote.length <= 80) {
         // Condition met: Quote length is less than or equal to 80 characters
         setQuote(newQuote);
+        setQuoteFetched(true)
       } else {
         // Condition not met: Quote length is greater than 80 characters
         // Make another API call by calling the function recursively
@@ -91,11 +101,12 @@ function Dashboard(): JSX.Element {
     }
   };
 
+
   return (
     <ThemeProvider theme={theme}>
       <Layout>
         <div>
-          <Button onClick={handleOpen} color="secondary">Get inspired !</Button>
+          <Button onClick={handleOpen} color="secondary">Get inspired</Button>
           <Modal
             open={open}
             onClose={handleClose}
@@ -103,26 +114,28 @@ function Dashboard(): JSX.Element {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-                <>
-                  <Typography id="modal-modal-description" variant="body1" sx={{ fontStyle: 'italic' }}>
-                    { quote.quote }
-                  </Typography>
-                  {quote.author ??
-                    <Typography id="modal-modal-title" variant="body2">
-                      { quote.author }
+              <>
+                {!quoteFetched ? (
+                  <Box sx={{ display:"flex", alignItems: 'center', justifyContent: 'center',}}>
+                  <CircularProgress color="secondary"/>
+                  </Box>
+                ) : (
+                  <>
+                    <Typography id="modal-modal-description" variant="body1" sx={{ fontStyle: 'italic' }}>
+                      "{quote.quote}"
                     </Typography>
-                  }
-                </>
+                    {quote.author && (
+                      <Typography id="modal-modal-title" variant="body2" marginTop={2}>
+                        {quote.author}
+                      </Typography>
+                    )}
+                  </>
+                )}
+
+              </>
             </Box>
           </Modal>
         </div>
-        {/* {quote.quote &&
-          <Box>
-            <Typography variant="body1" sx={{ fontStyle: 'italic' }}>"{quote.quote}"</Typography>
-            <Typography variant="body2">{quote.author !== "unknown" && quote.author}</Typography>
-          </Box>
-        } */}
-        {/* <Button variant="contained" onClick={() => addTasks()}>Ajouter une task</Button> */}
       </Layout>
     </ThemeProvider >
 
