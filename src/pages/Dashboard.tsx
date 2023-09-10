@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import WeekCalendar from '../components/WeekCalendar';
 
 const style = {
   position: 'absolute',
@@ -38,6 +39,14 @@ type UserType = {
 };
 
 function Dashboard(): JSX.Element {
+
+  const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [data, setData] = useState<string | null>(null);
+
+  const showDetailsHandle = (dayStr: string) => {
+    setData(dayStr);
+    setShowDetails(true);
+  };
 
   const userContext = useContext(UserContext)
   const [open, setOpen] = useState(false);
@@ -106,7 +115,10 @@ function Dashboard(): JSX.Element {
     <ThemeProvider theme={theme}>
       <Layout>
         <div>
-          <Button onClick={handleOpen} color="secondary">Get inspired</Button>
+          <div className='quoteContainer'>
+            <Button onClick={handleOpen} color="secondary">Get inspired</Button>
+          </div>
+          <WeekCalendar showDetailsHandle={showDetailsHandle} />
           <Modal
             open={open}
             onClose={handleClose}
@@ -116,8 +128,8 @@ function Dashboard(): JSX.Element {
             <Box sx={style}>
               <>
                 {!quoteFetched ? (
-                  <Box sx={{ display:"flex", alignItems: 'center', justifyContent: 'center',}}>
-                  <CircularProgress color="secondary"/>
+                  <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'center', }}>
+                    <CircularProgress color="secondary" />
                   </Box>
                 ) : (
                   <>
@@ -138,7 +150,6 @@ function Dashboard(): JSX.Element {
         </div>
       </Layout>
     </ThemeProvider >
-
   );
 }
 

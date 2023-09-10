@@ -28,7 +28,7 @@ const Header: React.FC = () => {
 
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [user, setUser] = useState<UserType | null>(null);
-    const [userReady, setUserReady] = useState<Boolean>(false);
+    const [userReady, setUserReady] = useState<boolean>(false);
 
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -100,7 +100,7 @@ const Header: React.FC = () => {
                                     <Avatar alt="user photo" src={userContext.user?.photo} sx={{ width: { xs: '50px', md: '80px' }, height: { xs: '50px', md: '80px' } }} />
                                 </IconButton>
                                 <Box sx={{ display: "flex", alignItems: 'center', ml: '10px' }}>
-                                    <Typography variant={'h3'} component={'h1'}>Hello, {userContext.user?.username}. </Typography>
+                                    <Typography sx={{ fontSize: { xs: '20px', sm: '30px', md:'40px' }}} variant={'h3'} component={'h1'}>Hello, {userContext.user?.username}. </Typography>
                                 </Box>
                             </>
                         ) :
