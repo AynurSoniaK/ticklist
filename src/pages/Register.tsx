@@ -10,17 +10,23 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { UserContext } from '../context/UserContext';
 
+type FormData = {
+    email: string;
+    password: string;
+    username: string;
+}
+
 function Register() {
 
     const userContext = useContext(UserContext)
 
-    const initialFormData = {
+    const initialFormData: FormData = {
         email: '',
         password: '',
         username: '',
     };
 
-    const [formData, setFormData] = useState(initialFormData);
+    const [formData, setFormData] = useState<FormData>(initialFormData);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -61,14 +67,14 @@ function Register() {
                     displayName: capitalize(formData.username),
                     photoURL: "https://images.pexels.com/photos/4919373/pexels-photo-4919373.jpeg?auto=compress&cs=tinysrgb&w=1600"
                 });
-                const email = user?.email || ''; 
-                const username = user?.displayName || ''; 
-                const photo = user?.photoURL || ''; 
-                userContext.setUser({
-                    email: email,
-                    username: username,
-                    photo: photo
-                  })
+                const email = user?.email || '';
+                const username = user?.displayName || '';
+                const photo = user?.photoURL || '';
+                // userContext.setUser({
+                //     email: email,
+                //     username: username,
+                //     photo: photo
+                //   })
                 setFormData({
                     email: '',
                     password: '',

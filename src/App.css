@@ -19,14 +19,32 @@ body {
     background: linear-gradient(90deg, rgba(187, 240, 188, 1) 0%, rgba(218, 176, 4) 89%);
 }
 
+.gradient-border {
+    position: relative;
+}
+
+.gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 2px;
+    background: linear-gradient(90deg, rgba(218, 176, 4) 0%, rgba(187, 240, 188, 1) 89%);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
 .header {
     display: flex;
 }
 
 .quoteContainer {
     display: flex;
-    justify-content: end;
-    margin: 1rem;
+    justify-content: flex-end;
+    margin: 1rem 1rem 0 0;
 }
 
 .quote {
@@ -79,7 +97,7 @@ body {
 /* Calendar */
 
 .secondary {
-    color:#DAB004;
+    color: #DAB004;
 }
 
 .calendar {
@@ -89,10 +107,16 @@ body {
 }
 
 .calendar .header {
-    text-transform: uppercase;
     font-weight: 500;
     font-size: 115%;
-    padding: 1.5em 0;
+}
+
+.pb {
+    padding-bottom: 1.5em;
+}
+
+.pt {
+    padding-top: 1.5em;
 }
 
 .calendar .header .icon {
@@ -124,7 +148,7 @@ body {
     font-size: 1.5em;
 }
 
-.calendar .body .selected .circle{
+.calendar .body .selected .circle {
     background-color: #DAB004;
     color: #ffffff;
     width: 40px;
@@ -135,7 +159,7 @@ body {
     align-items: center;
 }
 
-.calendar .body .selected .circle{
+.calendar .body .selected .circle {
     background-color: #DAB004;
     color: #ffffff;
     width: 40px;
@@ -202,4 +226,27 @@ body {
     flex-grow: 0;
     flex-basis: calc(100% / 7);
     width: calc(100% / 7);
+}
+
+.addIconContainer {
+    background: linear-gradient(90deg, rgba(218, 176, 4) 0%, rgba(187, 240, 188, 1) 89%);
+    color: #ffffff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 60px;
+    /* Adjust this value to control the vertical position */
+    right: 80px;
+    /* Adjust this value to control the horizontal position */
+    cursor: pointer;
+}
+
+/* Style for the button on hover (optional) */
+.sticky-button:hover {
+    background-color: #0056b3;
+    /* Hover background color */
 }

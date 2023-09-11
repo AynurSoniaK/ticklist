@@ -69,6 +69,7 @@ const Header: React.FC = () => {
                             <MenuIcon style={{ fontSize: '40px' }} />
                         </IconButton>
                         <Menu
+                            elevation={0}
                             id="menu-appbar"
                             anchorEl={anchorElNav}
                             anchorOrigin={{
@@ -83,7 +84,8 @@ const Header: React.FC = () => {
                             open={Boolean(anchorElNav)}
                             onClose={handleCloseNavMenu}
                             sx={{
-                                display: { xs: 'block', md: 'block' },
+                                display: { xs: 'flex', md: 'flex'  },
+                                flexDirection: 'row'
                             }}
                         >
                             {settings.map((setting) => (

@@ -51,11 +51,11 @@ function Login() {
         const username = user?.displayName || '';
         const photo = user?.photoURL || '';
 
-        userContext.setUser({
-          email: email,
-          username: username,
-          photo: photo
-        })
+        // userContext.setUser({
+        //   email: email,
+        //   username: username,
+        //   photo: photo
+        // })
         navigate('/dashboard');
       }
     } catch (error) {

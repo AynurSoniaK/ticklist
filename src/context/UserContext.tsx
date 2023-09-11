@@ -2,6 +2,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 interface AuthUser {
+    uid : string,
     email: string,
     username: string,
     photo: string,
@@ -26,7 +27,7 @@ export const UserContextProvider = ({ children }: UserProviderProps) => {
         onAuthStateChanged(auth, (userData) => {
             if (userData) {
                 const newUser = {
-                    uid: userData.uid,
+                    uid: userData.uid || '',
                     username: userData.displayName || '',
                     photo: userData.photoURL || '',
                     email: userData.email || '',

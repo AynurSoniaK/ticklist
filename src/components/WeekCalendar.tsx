@@ -51,7 +51,7 @@ const Calendar: React.FC<CalendarProps> = ({ showDetailsHandle }) => {
     const renderHeader = (): JSX.Element => {
         const dateFormat = "MMMM yyyy";
         return (
-            <div className="header row flex-middle">
+            <div className="header pb row flex-middle">
                 <div className="col col-left ml secondary">
                     <span>{format(currentMonth, dateFormat)}</span>
                 </div>
@@ -115,7 +115,7 @@ const Calendar: React.FC<CalendarProps> = ({ showDetailsHandle }) => {
 
     const renderFooter = (): JSX.Element => {
         return (
-            <div className="header row flex-middle">
+            <div className="header pt row flex-middle">
                 <div className="col col-start">
                     <div className="ml icon" onClick={() => changeWeekHandle("prev")}>
                         <ArrowBackIcon />

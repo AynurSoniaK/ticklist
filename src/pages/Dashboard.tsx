@@ -1,7 +1,5 @@
 import { useEffect, useState, useContext } from 'react'
 import axios from 'axios';
-import { app, db } from "../firebase"
-import { collection, addDoc } from "firebase/firestore"
 import theme from '../theme';
 import Layout from '../components/Layout'
 import { UserContext } from '../context/UserContext';
@@ -9,9 +7,12 @@ import { ThemeProvider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import WeekCalendar from '../components/WeekCalendar';
+import LightbulbCircleIcon from '@mui/icons-material/LightbulbCircle';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import { Tasks } from '../components/Tasks';
 
 const style = {
   position: 'absolute',
@@ -20,8 +21,10 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: '60%',
   maxWidth: 300,
+  boxShadow: 24,
   bgcolor: 'background.paper',
   borderRadius: '20px',
+  border: '2px solid #000',
   p: 4,
 };
 
@@ -38,7 +41,7 @@ type UserType = {
   email: string
 };
 
-function Dashboard(): JSX.Element {
+const Dashboard: React.FC = () => {
 
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const [data, setData] = useState<string | null>(null);
@@ -70,17 +73,6 @@ function Dashboard(): JSX.Element {
     category: ''
   });
   const [quoteFetched, setQuoteFetched] = useState(false);
-
-  async function addTasks(): Promise<void> {
-    try {
-      const docRef = await addDoc(collection(db, "tasks"), {
-        title: "Ada",
-      });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  }
 
   const fetchQuote = async () => {
     setQuote({
@@ -116,7 +108,11 @@ function Dashboard(): JSX.Element {
       <Layout>
         <div>
           <div className='quoteContainer'>
-            <Button onClick={handleOpen} color="secondary">Get inspired</Button>
+            <Tooltip title="Get inspired">
+              <IconButton onClick={handleOpen}>
+                <LightbulbCircleIcon fontSize="large"></LightbulbCircleIcon>
+              </IconButton>
+            </Tooltip>
           </div>
           <WeekCalendar showDetailsHandle={showDetailsHandle} />
           <Modal
@@ -143,10 +139,10 @@ function Dashboard(): JSX.Element {
                     )}
                   </>
                 )}
-
               </>
             </Box>
           </Modal>
+          <Tasks></Tasks>
         </div>
       </Layout>
     </ThemeProvider >
