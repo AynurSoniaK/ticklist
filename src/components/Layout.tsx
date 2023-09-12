@@ -12,7 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <>
             <Container 
                 disableGutters
-                maxWidth="md"
+                maxWidth="lg"
                 sx={{ 
                     bgcolor:"white",
                     borderRadius: '20px', 

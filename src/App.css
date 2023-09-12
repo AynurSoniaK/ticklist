@@ -27,7 +27,7 @@ body {
     content: "";
     position: absolute;
     inset: 0;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 2px;
     background: linear-gradient(90deg, rgba(218, 176, 4) 0%, rgba(187, 240, 188, 1) 89%);
     -webkit-mask:
@@ -239,14 +239,6 @@ body {
     align-items: center;
     position: fixed;
     bottom: 60px;
-    /* Adjust this value to control the vertical position */
     right: 80px;
-    /* Adjust this value to control the horizontal position */
     cursor: pointer;
-}
-
-/* Style for the button on hover (optional) */
-.sticky-button:hover {
-    background-color: #0056b3;
-    /* Hover background color */
 }

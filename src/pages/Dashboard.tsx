@@ -72,6 +72,7 @@ const Dashboard: React.FC = () => {
     author: '',
     category: ''
   });
+  
   const [quoteFetched, setQuoteFetched] = useState(false);
 
   const fetchQuote = async () => {
@@ -124,7 +125,7 @@ const Dashboard: React.FC = () => {
             <Box sx={style}>
               <>
                 {!quoteFetched ? (
-                  <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'center', }}>
+                  <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'center' }}>
                     <CircularProgress color="secondary" />
                   </Box>
                 ) : (
