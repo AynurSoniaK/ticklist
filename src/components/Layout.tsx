@@ -15,7 +15,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 maxWidth="lg"
                 sx={{ 
                     bgcolor:"white",
-                    borderRadius: '20px', 
+                    borderRadius: '20px',
+                    paddingBottom: '30px',
                     }}>
                 <Header />
                 <Container>{children}</Container>

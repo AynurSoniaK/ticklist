@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState, ChangeEvent } from 'react'
 import { app, db } from "../firebase"
 import { collection, addDoc, query, where, getDocs, doc, updateDoc } from "firebase/firestore"
 import { UserContext } from '../context/UserContext';
@@ -15,7 +15,9 @@ import Tooltip from '@mui/material/Tooltip';
 import Grid from '@mui/material/Grid';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import CircularProgress from '@mui/material/CircularProgress';
-
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -36,7 +38,7 @@ type Task = {
   user: string
   note: string
   createdAt: Date
-  dueDate: Date
+  dueDate: Date | null;
   urgent: boolean
   completed: boolean
 }
@@ -60,7 +62,7 @@ export const Tasks: React.FC = () => {
     user: userContext.user?.uid || "",
     note: "",
     createdAt: new Date() || "",
-    dueDate: new Date() || "",
+    dueDate: null,
     urgent: false,
     completed: false
   };
@@ -84,7 +86,6 @@ export const Tasks: React.FC = () => {
     setTasksList(updatedTasksList);
     const taskRef = doc(db, "tasks", task.id);
 
-    // Update the 'completed' property for the specific task in Firestore
     updateDoc(taskRef, {
       completed: event.target.checked,
     });
@@ -97,17 +98,28 @@ export const Tasks: React.FC = () => {
     });
   };
 
+  const onChangeDate = (date: Date | null) => {
+    console.log(date?.toISOString())
+    setFormTask({
+      ...formTask,
+      dueDate: date
+    });
+  }
+
   async function addTasks(): Promise<void> {
+    console.log(formTask)
     setOpen(true)
     try {
       const docRef = await addDoc(collection(db, "tasks"), {
         title: formTask.title,
         user: userContext.user?.uid,
         note: formTask.note,
+        createdAt: formTask.createdAt,
         dueDate: formTask.dueDate,
         urgent: formTask.urgent,
         completed: formTask.completed
       });
+      getTasksForUser()
     } catch (e) {
       console.error("Error adding document: ", e)
     }
@@ -205,6 +217,22 @@ export const Tasks: React.FC = () => {
                     name="note"
                     autoComplete="off"
                   />
+                </Box>
+                <Box marginBottom={3}>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      label="Due Date"
+                      value={formTask.dueDate || null}
+                      onChange={onChangeDate}
+                      sx={{
+                      maxWidth: "280px",
+                      "& .MuiInputLabel-root.Mui-focused": { color: "#979797" }, 
+                      "& .MuiOutlinedInput-root": {
+                      "&:hover > fieldset": { borderColor: "#C7C8CD" },
+                      borderRadius: "20px",
+                      },
+                    }} />
+                  </LocalizationProvider>
                 </Box>
                 <Box marginBottom={3}>
                   <FormControlLabel
