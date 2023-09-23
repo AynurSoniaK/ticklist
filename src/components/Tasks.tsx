@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState, ChangeEvent } from 'react'
 import { app, db } from "../firebase"
-import { collection, addDoc, query, where, getDocs, doc, updateDoc } from "firebase/firestore"
+import { collection, addDoc, query, where, getDocs, doc, updateDoc, Timestamp } from "firebase/firestore"
 import { UserContext } from '../context/UserContext';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -18,6 +18,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useNavigate } from 'react-router-dom';
+import { Task, TaskWithId } from '../types';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -33,20 +35,6 @@ const style = {
   textAlign: "center"
 };
 
-type Task = {
-  title: string
-  user: string
-  note: string
-  createdAt: Date
-  dueDate: Date | null;
-  urgent: boolean
-  completed: boolean
-}
-
-type TaskWithId = Task & {
-  id: string;
-};
-
 export const Tasks: React.FC = () => {
 
   const userContext = useContext(UserContext)
@@ -56,7 +44,6 @@ export const Tasks: React.FC = () => {
   const [tasksList, setTasksList] = useState<Task[]>([])
   const [tasksListReady, setTasksListReady] = useState<boolean>(false)
 
-
   const initialFormTask: Task = {
     title: "",
     user: userContext.user?.uid || "",
@@ -65,6 +52,15 @@ export const Tasks: React.FC = () => {
     dueDate: null,
     urgent: false,
     completed: false
+  };
+
+  const navigate = useNavigate();
+
+  const navigateToTaskDetails = (taskDetails: Task) => {
+    if (taskDetails) {
+      const taskDetailsString = JSON.stringify(taskDetails);
+      navigate(`/taskDetails/${encodeURIComponent(taskDetailsString)}`);
+    }
   };
 
   const [formTask, setFormTask] = useState(initialFormTask);
@@ -99,15 +95,14 @@ export const Tasks: React.FC = () => {
   };
 
   const onChangeDate = (date: Date | null) => {
-    console.log(date?.toISOString())
     setFormTask({
       ...formTask,
       dueDate: date
     });
   }
 
-  async function addTasks(): Promise<void> {
-    console.log(formTask)
+  async function addTask(): Promise<void> {
+    console.log(formTask,"1")
     setOpen(true)
     try {
       const docRef = await addDoc(collection(db, "tasks"), {
@@ -137,10 +132,20 @@ export const Tasks: React.FC = () => {
 
         querySnapshot.forEach((doc) => {
           const taskId = doc.id;
-          const taskData = doc.data() as Task
-
-          const taskWithId = { id: taskId, ...taskData }
-          newTasksList.push(taskWithId)
+          const taskData = doc.data() as Task;
+        
+          // Log the dueDateTimestamp value
+          console.log("dueDateTimestamp:", taskData.dueDate);
+        
+          // Convert Timestamps to Dates
+          const dueDateTimestamp = taskData.dueDate;
+          const dueDate = new Date(dueDateTimestamp.seconds * 1000);
+        
+          // Log the converted Date
+          console.log("converted dueDate:", dueDate);
+        
+          const taskWithId = { id: taskId, ...taskData, dueDate };
+          newTasksList.push(taskWithId);
         });
 
         setTasksList(newTasksList)
@@ -151,11 +156,12 @@ export const Tasks: React.FC = () => {
     }
   }
 
-
   useEffect(() => {
     getTasksForUser()
   }, [userContext.user?.uid])
 
+
+  console.log(tasksList)
 
   return (
     <Container>
@@ -166,7 +172,7 @@ export const Tasks: React.FC = () => {
             </Typography>
             <Grid container spacing={1} display="flex" justifyContent='space-evenly'>
               {tasksList.map((task, i) => (
-                <Grid item className='gradient-border' m={1} p={2} xs={12} sm={12} md={5.5} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                <Grid key={i} item className='gradient-border' m={1} p={2} xs={12} sm={12} md={5.5} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
                   <Checkbox
                     name="completed"
                     checked={task.completed}
@@ -174,7 +180,9 @@ export const Tasks: React.FC = () => {
                     inputProps={{ 'aria-label': 'controlled' }}
                   />
                   <Typography variant="body1">{task.title}</Typography>
-                  <EditNoteIcon fontSize="large" />
+                  <IconButton  onClick={() => navigateToTaskDetails(task)}>
+                    <EditNoteIcon fontSize="large" />
+                  </IconButton>
                 </Grid>
               ))}
             </Grid>
@@ -225,13 +233,13 @@ export const Tasks: React.FC = () => {
                       value={formTask.dueDate || null}
                       onChange={onChangeDate}
                       sx={{
-                      maxWidth: "280px",
-                      "& .MuiInputLabel-root.Mui-focused": { color: "#979797" }, 
-                      "& .MuiOutlinedInput-root": {
-                      "&:hover > fieldset": { borderColor: "#C7C8CD" },
-                      borderRadius: "20px",
-                      },
-                    }} />
+                        maxWidth: "280px",
+                        "& .MuiInputLabel-root.Mui-focused": { color: "#979797" },
+                        "& .MuiOutlinedInput-root": {
+                          "&:hover > fieldset": { borderColor: "#C7C8CD" },
+                          borderRadius: "20px",
+                        },
+                      }} />
                   </LocalizationProvider>
                 </Box>
                 <Box marginBottom={3}>
@@ -249,7 +257,7 @@ export const Tasks: React.FC = () => {
                 </Box>
               </form>
               <Box margin={3}>
-                <Button variant="contained" color="primary" className='button-gradient' sx={{ p: "10px 20px", borderRadius: "20px" }} onClick={addTasks}>
+                <Button variant="contained" color="primary" className='button-gradient' sx={{ p: "10px 20px", borderRadius: "20px" }} onClick={addTask}>
                   create a new task
                 </Button>
               </Box>

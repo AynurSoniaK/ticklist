@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import TaskDetails from './pages/TaskDetails';
 import {
   BrowserRouter,
   Routes,
@@ -21,6 +22,7 @@ function App(): JSX.Element {
           <Route path="/Register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/taskDetails/:taskDetailsString" element={<TaskDetails />} />
           {/* <Route path="/profile" element={token ? <Profile /> : <Login />} />
       <Route path="/error" element={token ? <ErrorPage /> : <Login />} /> */}
           <Route path="*" element={<Login />} />

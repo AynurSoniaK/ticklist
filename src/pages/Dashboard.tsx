@@ -3,6 +3,7 @@ import axios from 'axios';
 import theme from '../theme';
 import Layout from '../components/Layout'
 import { UserContext } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -34,13 +35,6 @@ type Quote = {
   category: string;
 }
 
-type UserType = {
-  uid: string,
-  username: string,
-  photo: string,
-  email: string
-};
-
 const Dashboard: React.FC = () => {
 
   const [showDetails, setShowDetails] = useState<boolean>(false);
@@ -62,6 +56,8 @@ const Dashboard: React.FC = () => {
     setOpen(false);
     setQuoteFetched(false)
   }
+
+  const navigate = useNavigate();
 
   const category = 'success'
   const apiUrl = `https://api.api-ninjas.com/v1/quotes?category=${category}`
