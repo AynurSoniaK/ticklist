@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState, ChangeEvent } from 'react'
 import { app, db } from "../firebase"
-import { collection, addDoc, query, where, getDocs, doc, updateDoc, Timestamp } from "firebase/firestore"
+import { collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore"
 import { UserContext } from '../context/UserContext';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -15,11 +15,13 @@ import Tooltip from '@mui/material/Tooltip';
 import Grid from '@mui/material/Grid';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import CircularProgress from '@mui/material/CircularProgress';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate } from 'react-router-dom';
 import { Task, TaskWithId } from '../types';
+
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -41,8 +43,12 @@ export const Tasks: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
+  const [openModalDelete, setOpenModalDelete] = useState<boolean>(false)
+  const handleCloseDelete = () => setOpenModalDelete(false)
   const [tasksList, setTasksList] = useState<Task[]>([])
   const [tasksListReady, setTasksListReady] = useState<boolean>(false)
+  const [taskToDelete, setTaskToDelete] = useState<string>("");
+
 
   const initialFormTask: Task = {
     title: "",
@@ -60,6 +66,21 @@ export const Tasks: React.FC = () => {
     if (taskDetails) {
       const taskDetailsString = JSON.stringify(taskDetails);
       navigate(`/taskDetails/${encodeURIComponent(taskDetailsString)}`);
+    }
+  };
+
+  const handleOpenDelete = (task: Task) => {
+    setOpenModalDelete(true)
+    if (task.id) {
+      setTaskToDelete(task.id);
+    }
+  }
+
+  async function deleteTask(taskToDelete: string) {
+    if (taskToDelete) {
+      await deleteDoc(doc(db, "tasks", taskToDelete));
+      setOpenModalDelete(false)
+      getTasksForUser()
     }
   };
 
@@ -102,7 +123,6 @@ export const Tasks: React.FC = () => {
   }
 
   async function addTask(): Promise<void> {
-    console.log(formTask,"1")
     setOpen(true)
     try {
       const docRef = await addDoc(collection(db, "tasks"), {
@@ -133,19 +153,17 @@ export const Tasks: React.FC = () => {
         querySnapshot.forEach((doc) => {
           const taskId = doc.id;
           const taskData = doc.data() as Task;
-        
-          // Log the dueDateTimestamp value
-          console.log("dueDateTimestamp:", taskData.dueDate);
-        
-          // Convert Timestamps to Dates
-          const dueDateTimestamp = taskData.dueDate;
-          const dueDate = new Date(dueDateTimestamp.seconds * 1000);
-        
-          // Log the converted Date
-          console.log("converted dueDate:", dueDate);
-        
-          const taskWithId = { id: taskId, ...taskData, dueDate };
-          newTasksList.push(taskWithId);
+
+          if (taskData.dueDate) {
+            // Convert Timestamps to Dates
+            const dueDateTimestamp = taskData.dueDate;
+            const dueDate = new Date(dueDateTimestamp.seconds * 1000);
+            const taskWithId = { id: taskId, ...taskData, dueDate };
+            newTasksList.push(taskWithId);
+          } else {
+            const taskWithId = { id: taskId, ...taskData };
+            newTasksList.push(taskWithId);
+          }
         });
 
         setTasksList(newTasksList)
@@ -180,9 +198,14 @@ export const Tasks: React.FC = () => {
                     inputProps={{ 'aria-label': 'controlled' }}
                   />
                   <Typography variant="body1">{task.title}</Typography>
-                  <IconButton  onClick={() => navigateToTaskDetails(task)}>
-                    <EditNoteIcon fontSize="large" />
-                  </IconButton>
+                  <Box>
+                    <IconButton onClick={() => navigateToTaskDetails(task)}>
+                      <EditNoteIcon fontSize="large" />
+                    </IconButton>
+                    <IconButton onClick={() => handleOpenDelete(task as TaskWithId)}>
+                      <DeleteOutlinedIcon fontSize="large" />
+                    </IconButton>
+                  </Box>
                 </Grid>
               ))}
             </Grid>
@@ -259,6 +282,30 @@ export const Tasks: React.FC = () => {
               <Box margin={3}>
                 <Button variant="contained" color="primary" className='button-gradient' sx={{ p: "10px 20px", borderRadius: "20px" }} onClick={addTask}>
                   create a new task
+                </Button>
+              </Box>
+            </Box>
+          </Modal>
+          <Modal
+            open={openModalDelete}
+            onClose={handleCloseDelete}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography variant={'h4'} component={'h1'} p={3}>Delete task</Typography>
+              <Typography variant={'subtitle1'}>Are you sure you want to delete this task ?</Typography>
+              <Box margin={3}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  sx={{ p: '10px 20px', borderRadius: '20px', marginRight: '20px', opacity: 0.8, margin: '5px' }}
+                  onClick={handleCloseDelete}
+                >
+                  Cancel
+                </Button>
+                <Button onClick={() => deleteTask(taskToDelete)} variant="contained" color="primary" className='button-gradient' sx={{ p: "10px 20px", borderRadius: "20px" }}>
+                  delete task
                 </Button>
               </Box>
             </Box>
