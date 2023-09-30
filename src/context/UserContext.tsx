@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { Task } from "../types";
 
 interface AuthUser {
     uid : string,
@@ -9,9 +10,11 @@ interface AuthUser {
 }
 
 export interface UserContextType {
-    user: AuthUser | null,
-    setUser: React.Dispatch<React.SetStateAction<AuthUser | null>>
-}
+    user: AuthUser | null;
+    userTasks: Task[] | null;
+    setUser: React.Dispatch<React.SetStateAction<AuthUser | null>>;
+    setUserTasks: React.Dispatch<React.SetStateAction<Task[] | null>>;
+  }  
 
 type UserProviderProps = {
     children: ReactNode;
@@ -21,6 +24,7 @@ export const UserContext = createContext({} as UserContextType);
 
 export const UserContextProvider = ({ children }: UserProviderProps) => {
     const [user, setUser] = useState<AuthUser | null>(null);
+    const [userTasks, setUserTasks] = useState<Task[] | null>(null);
 
     useEffect(() => {
         const auth = getAuth();
@@ -38,7 +42,7 @@ export const UserContextProvider = ({ children }: UserProviderProps) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{ user, setUser, userTasks, setUserTasks }}>
             {children}
         </UserContext.Provider>
     );

@@ -13,7 +13,7 @@ import WeekCalendar from '../components/WeekCalendar';
 import LightbulbCircleIcon from '@mui/icons-material/LightbulbCircle';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
-import { Tasks } from '../components/Tasks';
+import Tasks from '../components/Tasks';
 
 const style = {
   position: 'absolute',
@@ -38,10 +38,10 @@ type Quote = {
 const Dashboard: React.FC = () => {
 
   const [showDetails, setShowDetails] = useState<boolean>(false);
-  const [data, setData] = useState<string | null>(null);
+  const [data, setData] = useState<Date>(new Date());
 
-  const showDetailsHandle = (dayStr: string) => {
-    setData(dayStr);
+  const showDetailsHandle = (day: Date) => {
+    setData(day);
     setShowDetails(true);
   };
 
@@ -139,7 +139,7 @@ const Dashboard: React.FC = () => {
               </>
             </Box>
           </Modal>
-          <Tasks></Tasks>
+          <Tasks dateCalendar={data}></Tasks>
         </div>
       </Layout>
     </ThemeProvider >

@@ -15,7 +15,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardSharpIcon from '@mui/icons-material/ArrowForwardSharp';
 
 interface CalendarProps {
-    showDetailsHandle: (dayStr: string) => void;
+    showDetailsHandle: (day: Date) => void;
 }
 
 const Calendar: React.FC<CalendarProps> = ({ showDetailsHandle }) => {
@@ -32,6 +32,7 @@ const Calendar: React.FC<CalendarProps> = ({ showDetailsHandle }) => {
     //     }
     // };
 
+
     const changeWeekHandle = (btnType: "prev" | "next"): void => {
         if (btnType === "prev") {
             setCurrentMonth(subWeeks(currentMonth, 1));
@@ -45,7 +46,7 @@ const Calendar: React.FC<CalendarProps> = ({ showDetailsHandle }) => {
 
     const onDateClickHandle = (day: Date, dayStr: string): void => {
         setSelectedDate(day);
-        showDetailsHandle(dayStr);
+        showDetailsHandle(day);
     };
 
     const renderHeader = (): JSX.Element => {

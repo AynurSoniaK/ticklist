@@ -37,7 +37,11 @@ const style = {
   textAlign: "center"
 };
 
-export const Tasks: React.FC = () => {
+type TasksProps = {
+  dateCalendar: Date | null;
+}
+
+const Tasks: React.FC<TasksProps> = ({ dateCalendar }) => {
 
   const userContext = useContext(UserContext)
   const [open, setOpen] = useState<boolean>(false)
@@ -148,7 +152,7 @@ export const Tasks: React.FC = () => {
       const q = query(collection(db, "tasks"), where("user", "==", userId))
       try {
         const querySnapshot = await getDocs(q);
-        const newTasksList: Task[] = []
+        let newTasksList: Task[] = []
 
         querySnapshot.forEach((doc) => {
           const taskId = doc.id;
@@ -165,9 +169,19 @@ export const Tasks: React.FC = () => {
             newTasksList.push(taskWithId);
           }
         });
-
+        if (dateCalendar) {
+          console.log("filtered")
+          newTasksList = newTasksList.filter((task) => {
+            return (
+              (task.dueDate !== null && task.dueDate.toDateString() === dateCalendar.toDateString()) ||
+              task.dueDate.toDateString().includes("Thu Jan 01 1970") || task.dueDate.getTime() < dateCalendar.getTime()
+            );
+          });
+        }
+        console.log(newTasksList,)
         setTasksList(newTasksList)
         setTasksListReady(true)
+        userContext.setUserTasks(newTasksList);
       } catch (error) {
         console.error("Error getting tasks:", error)
       }
@@ -176,7 +190,7 @@ export const Tasks: React.FC = () => {
 
   useEffect(() => {
     getTasksForUser()
-  }, [userContext.user?.uid])
+  }, [userContext.user?.uid, dateCalendar])
 
 
   console.log(tasksList)
@@ -189,25 +203,36 @@ export const Tasks: React.FC = () => {
             <Typography variant={'h5'} component={'h1'} p={2}>Today tasks
             </Typography>
             <Grid container spacing={1} display="flex" justifyContent='space-evenly'>
-              {tasksList.map((task, i) => (
-                <Grid key={i} item className='gradient-border' m={1} p={2} xs={12} sm={12} md={5.5} display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-                  <Checkbox
-                    name="completed"
-                    checked={task.completed}
-                    onChange={(event) => handleChangeStatus(event, i, task as TaskWithId)}
-                    inputProps={{ 'aria-label': 'controlled' }}
-                  />
-                  <Typography variant="body1">{task.title}</Typography>
-                  <Box>
-                    <IconButton onClick={() => navigateToTaskDetails(task)}>
-                      <EditNoteIcon fontSize="large" />
-                    </IconButton>
-                    <IconButton onClick={() => handleOpenDelete(task as TaskWithId)}>
-                      <DeleteOutlinedIcon fontSize="large" />
-                    </IconButton>
-                  </Box>
-                </Grid>
-              ))}
+              {tasksList
+                .map((task, i) => (
+                  <Grid key={i} item xs={12} sm={12} md={5.5}>
+                    {/* Individual task content */}
+                    <Box 
+                      className={task.dueDate.toDateString().includes("Thu Jan 01 1970") ? 'grey-border' : (dateCalendar !== null && task.dueDate.getTime() < dateCalendar.getTime()) ? "red-border" : 'gradient-border'} 
+                      m={1} 
+                      p={2} 
+                      display={'flex'} 
+                      flexDirection={'row'} 
+                      justifyContent={'space-between'} 
+                      alignItems={'center'}>
+                      <Checkbox
+                        name="completed"
+                        checked={task.completed}
+                        onChange={(event) => handleChangeStatus(event, i, task as TaskWithId)}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                      <Typography variant="body1">{task.title}</Typography>
+                      <Box>
+                        <IconButton onClick={() => navigateToTaskDetails(task)}>
+                          <EditNoteIcon fontSize="large" />
+                        </IconButton>
+                        <IconButton onClick={() => handleOpenDelete(task as TaskWithId)}>
+                          <DeleteOutlinedIcon fontSize="large" />
+                        </IconButton>
+                      </Box>
+                    </Box>
+                  </Grid>
+                ))}
             </Grid>
           </Box>
           <Tooltip title="Add task">
@@ -320,3 +345,5 @@ export const Tasks: React.FC = () => {
 
   )
 }
+
+export default Tasks;

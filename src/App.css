@@ -37,6 +37,16 @@ body {
     mask-composite: exclude;
 }
 
+.grey-border {
+    border: 3px solid gray;
+    border-radius: 10px;
+}
+
+.red-border {
+    border: 3px solid red;
+    border-radius: 10px;
+}
+
 .header {
     display: flex;
 }
