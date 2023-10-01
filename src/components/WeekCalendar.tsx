@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { UserContext } from '../context/UserContext';
 import {
     format,
     subMonths,
@@ -19,9 +20,12 @@ interface CalendarProps {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ showDetailsHandle }) => {
-    const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+
+    const userContext = useContext(UserContext)
+
+    const [currentMonth, setCurrentMonth] = useState<Date>(userContext.userDateSelected);
     const [currentWeek, setCurrentWeek] = useState<number>(getWeek(currentMonth));
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+    const [selectedDate, setSelectedDate] = useState<Date>(userContext.userDateSelected);
 
     // const changeMonthHandle = (btnType: "prev" | "next"): void => {
     //     if (btnType === "prev") {
@@ -46,8 +50,13 @@ const Calendar: React.FC<CalendarProps> = ({ showDetailsHandle }) => {
 
     const onDateClickHandle = (day: Date, dayStr: string): void => {
         setSelectedDate(day);
+        userContext.setUserDateSelected(day)
         showDetailsHandle(day);
     };
+    
+    useEffect(() => {
+        userContext.setUserDateSelected(selectedDate);
+    }, [])
 
     const renderHeader = (): JSX.Element => {
         const dateFormat = "MMMM yyyy";

@@ -37,13 +37,11 @@ const style = {
   textAlign: "center"
 };
 
-type TasksProps = {
-  dateCalendar: Date | null;
-}
 
-const Tasks: React.FC<TasksProps> = ({ dateCalendar }) => {
+const Tasks: React.FC = () => {
 
   const userContext = useContext(UserContext)
+
   const [open, setOpen] = useState<boolean>(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -52,7 +50,6 @@ const Tasks: React.FC<TasksProps> = ({ dateCalendar }) => {
   const [tasksList, setTasksList] = useState<Task[]>([])
   const [tasksListReady, setTasksListReady] = useState<boolean>(false)
   const [taskToDelete, setTaskToDelete] = useState<string>("");
-
 
   const initialFormTask: Task = {
     title: "",
@@ -169,16 +166,15 @@ const Tasks: React.FC<TasksProps> = ({ dateCalendar }) => {
             newTasksList.push(taskWithId);
           }
         });
-        if (dateCalendar) {
-          console.log("filtered")
+        if (userContext.userDateSelected) {
           newTasksList = newTasksList.filter((task) => {
             return (
-              (task.dueDate !== null && task.dueDate.toDateString() === dateCalendar.toDateString()) ||
-              task.dueDate.toDateString().includes("Thu Jan 01 1970") || task.dueDate.getTime() < dateCalendar.getTime()
+              (task.dueDate !== null && task.dueDate.toDateString() === userContext.userDateSelected?.toDateString()) ||
+              (!task.completed && task.dueDate.toDateString().includes("Thu Jan 01 1970")) ||
+              (!task.completed && task.dueDate?.getTime() < userContext.userDateSelected?.getTime()) 
             );
           });
         }
-        console.log(newTasksList,)
         setTasksList(newTasksList)
         setTasksListReady(true)
         userContext.setUserTasks(newTasksList);
@@ -190,30 +186,28 @@ const Tasks: React.FC<TasksProps> = ({ dateCalendar }) => {
 
   useEffect(() => {
     getTasksForUser()
-  }, [userContext.user?.uid, dateCalendar])
+  }, [userContext.user?.uid, userContext.userDateSelected])
 
-
-  console.log(tasksList)
 
   return (
     <Container>
       {tasksListReady ?
         <>
           <Box color="secondary">
-            <Typography variant={'h5'} component={'h1'} p={2}>Today tasks
+            <Typography variant={'h5'} component={'h1'} p={2}>Tasks for {userContext?.userDateSelected.toLocaleDateString()}
             </Typography>
-            <Grid container spacing={1} display="flex" justifyContent='space-evenly'>
+            <Grid container display="flex" justifyContent='space-evenly'>
               {tasksList
                 .map((task, i) => (
-                  <Grid key={i} item xs={12} sm={12} md={5.5}>
+                  <Grid key={i} item xs={12} sm={12} md={5.8}>
                     {/* Individual task content */}
-                    <Box 
-                      className={task.dueDate.toDateString().includes("Thu Jan 01 1970") ? 'grey-border' : (dateCalendar !== null && task.dueDate.getTime() < dateCalendar.getTime()) ? "red-border" : 'gradient-border'} 
-                      m={1} 
-                      p={2} 
-                      display={'flex'} 
-                      flexDirection={'row'} 
-                      justifyContent={'space-between'} 
+                    <Box
+                      className={task.dueDate.toDateString().includes("Thu Jan 01 1970") ? 'grey-border' : (userContext.userDateSelected !== null && task.dueDate.getTime() < userContext.userDateSelected.getTime()) ? "red-border" : 'gradient-border'}
+                      my={1}
+                      p={2}
+                      display={'flex'}
+                      flexDirection={'row'}
+                      justifyContent={'space-between'}
                       alignItems={'center'}>
                       <Checkbox
                         name="completed"

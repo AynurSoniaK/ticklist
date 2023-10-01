@@ -52,6 +52,7 @@ const Dashboard: React.FC = () => {
     setOpen(true)
     fetchQuote()
   };
+
   const handleClose = () => {
     setOpen(false);
     setQuoteFetched(false)
@@ -139,7 +140,7 @@ const Dashboard: React.FC = () => {
               </>
             </Box>
           </Modal>
-          <Tasks dateCalendar={data}></Tasks>
+          <Tasks ></Tasks>
         </div>
       </Layout>
     </ThemeProvider >
