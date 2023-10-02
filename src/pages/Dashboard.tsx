@@ -14,6 +14,7 @@ import LightbulbCircleIcon from '@mui/icons-material/LightbulbCircle';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Tasks from '../components/Tasks';
+import Stats from '../components/Stats';
 
 const style = {
   position: 'absolute',
@@ -140,6 +141,7 @@ const Dashboard: React.FC = () => {
               </>
             </Box>
           </Modal>
+          <Stats></Stats>
           <Tasks ></Tasks>
         </div>
       </Layout>

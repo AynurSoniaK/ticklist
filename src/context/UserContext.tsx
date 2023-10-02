@@ -44,8 +44,6 @@ export const UserContextProvider = ({ children }: UserProviderProps) => {
         });
     }, []);
 
-    console.log(userDateSelected,"contexthere")
-
     useEffect(() => {
         const midnightDate = new Date(userDateSelected);
         midnightDate.setHours(0, 0, 0, 0);

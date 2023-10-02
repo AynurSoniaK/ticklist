@@ -45,6 +45,12 @@ body {
 .red-border {
     border: 3px solid red;
     border-radius: 10px;
+    color: red
+}
+
+.green-border {
+    border: 3px solid #BBF0BC;
+    border-radius: 10px;
 }
 
 .header {
@@ -252,3 +258,6 @@ body {
     right: 80px;
     cursor: pointer;
 }
+
+/*Stats*/
+

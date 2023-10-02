@@ -56,7 +56,7 @@ const Tasks: React.FC = () => {
     user: userContext.user?.uid || "",
     note: "",
     createdAt: new Date() || "",
-    dueDate: null,
+    dueDate: new Date() || "",
     urgent: false,
     completed: false
   };
@@ -107,6 +107,7 @@ const Tasks: React.FC = () => {
     updateDoc(taskRef, {
       completed: event.target.checked,
     });
+    getTasksForUser()
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -202,7 +203,7 @@ const Tasks: React.FC = () => {
                   <Grid key={i} item xs={12} sm={12} md={5.8}>
                     {/* Individual task content */}
                     <Box
-                      className={task.dueDate.toDateString().includes("Thu Jan 01 1970") ? 'grey-border' : (userContext.userDateSelected !== null && task.dueDate.getTime() < userContext.userDateSelected.getTime()) ? "red-border" : 'gradient-border'}
+                      className={task.completed ? "green-border" : task.dueDate.toDateString().includes("Thu Jan 01 1970") ? 'grey-border' : (userContext.userDateSelected !== null && task.dueDate.getTime() < userContext.userDateSelected.getTime()) ? "red-border" : 'gradient-border'}
                       my={1}
                       p={2}
                       display={'flex'}
