@@ -60,7 +60,7 @@ body {
 .quoteContainer {
     display: flex;
     justify-content: flex-end;
-    margin: 1rem 1rem 0 0;
+    margin: 1rem 1.5rem 0 0;
 }
 
 .quote {
@@ -247,16 +247,14 @@ body {
 .addIconContainer {
     background: linear-gradient(90deg, rgba(218, 176, 4) 0%, rgba(187, 240, 188, 1) 89%);
     color: #ffffff;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: fixed;
-    bottom: 60px;
-    right: 80px;
     cursor: pointer;
+    margin: 10px;
 }
 
 /*Stats*/

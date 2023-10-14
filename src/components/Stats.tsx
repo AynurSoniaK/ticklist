@@ -4,13 +4,19 @@ import { UserContext } from '../context/UserContext';
 
 
 const style = {
-    width: '60%',
+    width: '80%',
     maxWidth: 300,
     borderRadius: '15px',
     backgroundColor: '#FCEEB1',
-    m: 3,
-    p: 4,
-    textAlign:"center"
+    m: '10px',
+    p: '8px',
+    textAlign:"center",
+    fontSize: {
+        xs: '18px', 
+        sm: '22px', 
+        md: '30px', 
+      },
+    color:"#707070"
 }
 
 export default function Stats() {

@@ -172,7 +172,7 @@ const Tasks: React.FC = () => {
             return (
               (task.dueDate !== null && task.dueDate.toDateString() === userContext.userDateSelected?.toDateString()) ||
               (!task.completed && task.dueDate.toDateString().includes("Thu Jan 01 1970")) ||
-              (!task.completed && task.dueDate?.getTime() < userContext.userDateSelected?.getTime()) 
+              (!task.completed && task.dueDate?.getTime() < userContext.userDateSelected?.getTime())
             );
           });
         }
@@ -191,13 +191,25 @@ const Tasks: React.FC = () => {
 
 
   return (
-    <Container>
+    <Container sx={{ position: "relative" }}>
       {tasksListReady ?
         <>
           <Box color="secondary">
-            <Typography variant={'h5'} component={'h1'} p={2}>Tasks for {userContext?.userDateSelected.toLocaleDateString()}
-            </Typography>
-            <Grid container display="flex" justifyContent='space-evenly'>
+            <Box display="flex">
+              {tasksList.length > 0 ?
+                <Typography variant={'h5'} component={'h1'} p={2}>Tasks for {userContext?.userDateSelected.toLocaleDateString()}</Typography>
+                :
+                <Typography variant={'h5'} component={'h2'} p={2}>You have no task yet →</Typography>
+              }
+              <Tooltip title="Add task">
+                <div className='addIconContainer'>
+                  <IconButton onClick={handleOpen}>
+                    <AddIcon fontSize="large" />
+                  </IconButton>
+                </div>
+              </Tooltip>
+            </Box>
+            <Grid container display="flex" justifyContent='start' gap='10px'>
               {tasksList
                 .map((task, i) => (
                   <Grid key={i} item xs={12} sm={12} md={5.8}>
@@ -208,7 +220,6 @@ const Tasks: React.FC = () => {
                       p={2}
                       display={'flex'}
                       flexDirection={'row'}
-                      justifyContent={'space-between'}
                       alignItems={'center'}>
                       <Checkbox
                         name="completed"
@@ -230,13 +241,6 @@ const Tasks: React.FC = () => {
                 ))}
             </Grid>
           </Box>
-          <Tooltip title="Add task">
-            <div className='addIconContainer'>
-              <IconButton onClick={handleOpen}>
-                <AddIcon fontSize="large" />
-              </IconButton>
-            </div>
-          </Tooltip>
           <Modal
             open={open}
             onClose={handleClose}
