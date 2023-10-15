@@ -89,15 +89,13 @@ const TaskDetails: React.FC = () => {
         if (taskDetails) {
             try {
                 const taskRef = doc(db, "tasks", taskDetails.id);
-                updateDoc(taskRef, taskDetails)
+                await updateDoc(taskRef, taskDetails)
             } catch (e) {
                 console.error("Error updating document: ", taskDetails.title)
             }
         }
         navigate("/dashboard")
     }
-
-    console.log(taskDetails)
 
     return (
         <>
@@ -137,7 +135,7 @@ const TaskDetails: React.FC = () => {
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DatePicker
                                         label="Due Date"
-                                        value={taskDetails.dueDate || null}
+                                        value={taskDetails.dueDate && taskDetails.dueDate.toDateString() !== "Thu Jan 01 1970" ? taskDetails.dueDate : null}
                                         onChange={onChangeDate}
                                         sx={{
                                             maxWidth: '280px',

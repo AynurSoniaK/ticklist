@@ -55,8 +55,8 @@ const Tasks: React.FC = () => {
     title: "",
     user: userContext.user?.uid || "",
     note: "",
-    createdAt: new Date() || "",
-    dueDate: new Date() || "",
+    createdAt: new Date(),
+    dueDate: null,
     urgent: false,
     completed: false
   };
@@ -95,7 +95,7 @@ const Tasks: React.FC = () => {
     });
   };
 
-  const handleChangeStatus = (event: React.ChangeEvent<HTMLInputElement>, i: number, task: TaskWithId) => {
+  const handleChangeStatus = async (event: React.ChangeEvent<HTMLInputElement>, i: number, task: TaskWithId) => {
     const updatedTasksList = [...tasksList];
     updatedTasksList[i] = {
       ...updatedTasksList[i],
@@ -104,7 +104,7 @@ const Tasks: React.FC = () => {
     setTasksList(updatedTasksList);
     const taskRef = doc(db, "tasks", task.id);
 
-    updateDoc(taskRef, {
+    await updateDoc(taskRef, {
       completed: event.target.checked,
     });
     getTasksForUser()
@@ -170,9 +170,10 @@ const Tasks: React.FC = () => {
         if (userContext.userDateSelected) {
           newTasksList = newTasksList.filter((task) => {
             return (
-              (task.dueDate !== null && task.dueDate.toDateString() === userContext.userDateSelected?.toDateString()) ||
-              (!task.completed && task.dueDate.toDateString().includes("Thu Jan 01 1970")) ||
-              (!task.completed && task.dueDate?.getTime() < userContext.userDateSelected?.getTime())
+              (task.dueDate && task.dueDate.toDateString() === userContext.userDateSelected?.toDateString()) ||
+              (task.dueDate && !task.completed && task.dueDate.toDateString().includes("Thu Jan 01 1970")) ||
+              (task.dueDate && !task.completed && task.dueDate?.getTime() < userContext.userDateSelected?.getTime()) ||
+              (task.dueDate == null || task.dueDate === undefined)
             );
           });
         }
@@ -215,11 +216,12 @@ const Tasks: React.FC = () => {
                   <Grid key={i} item xs={12} sm={12} md={5.8}>
                     {/* Individual task content */}
                     <Box
-                      className={task.completed ? "green-border" : task.dueDate.toDateString().includes("Thu Jan 01 1970") ? 'grey-border' : (userContext.userDateSelected !== null && task.dueDate.getTime() < userContext.userDateSelected.getTime()) ? "red-border" : 'gradient-border'}
+                      className={task.completed ? "green-border" : !task.dueDate ? "grey-border" : task.dueDate.toDateString().includes("Thu Jan 01 1970") ? 'grey-border' : (userContext.userDateSelected !== null && task.dueDate.getTime() < userContext.userDateSelected.getTime()) ? "red-border" : 'gradient-border'}
                       my={1}
                       p={2}
                       display={'flex'}
                       flexDirection={'row'}
+                      justifyContent='space-between'
                       alignItems={'center'}>
                       <Checkbox
                         name="completed"
@@ -252,6 +254,7 @@ const Tasks: React.FC = () => {
               <form>
                 <Box marginBottom={3}>
                   <TextField
+                    label="Task"
                     placeholder="What task ?"
                     variant="outlined"
                     InputProps={{ sx: { borderRadius: 5 } }}
@@ -263,6 +266,7 @@ const Tasks: React.FC = () => {
                 </Box>
                 <Box marginBottom={3}>
                   <TextField
+                    label="Note"
                     placeholder="Add a note ?"
                     type="note"
                     variant="outlined"
@@ -277,13 +281,11 @@ const Tasks: React.FC = () => {
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                       label="Due Date"
-                      value={formTask.dueDate || null}
+                      value={formTask.dueDate}
                       onChange={onChangeDate}
                       sx={{
                         maxWidth: "280px",
-                        "& .MuiInputLabel-root.Mui-focused": { color: "#979797" },
                         "& .MuiOutlinedInput-root": {
-                          "&:hover > fieldset": { borderColor: "#C7C8CD" },
                           borderRadius: "20px",
                         },
                       }} />
