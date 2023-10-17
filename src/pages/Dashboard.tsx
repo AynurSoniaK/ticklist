@@ -107,11 +107,10 @@ const Dashboard: React.FC = () => {
       <Layout>
         <div>
           <div className='quoteContainer'>
-            <Tooltip title="Get inspired">
+            <p>Get a quote</p>
               <IconButton onClick={handleOpen}>
                 <LightbulbCircleIcon fontSize="large"></LightbulbCircleIcon>
               </IconButton>
-            </Tooltip>
           </div>
           <WeekCalendar showDetailsHandle={showDetailsHandle} />
           <Modal
