@@ -152,7 +152,6 @@ const Dashboard: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <Layout>
-        <div>
           <div className='quoteContainer'>
             {weather.city ? (
               <div className='weather'>
@@ -203,7 +202,6 @@ const Dashboard: React.FC = () => {
           </Modal>
           <Stats></Stats>
           <Tasks ></Tasks>
-        </div>
       </Layout>
     </ThemeProvider >
   );
