@@ -36,15 +36,30 @@ type Quote = {
   category: string;
 }
 
+type Weather = {
+  city: string;
+  temp: number;
+  icon: string;
+}
+
 const Dashboard: React.FC = () => {
 
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const [data, setData] = useState<Date>(new Date());
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
+  const [weather, setWeather] = useState<Weather>({
+    city: '',
+    temp: 0,
+    icon: ''
+  });
 
   const showDetailsHandle = (day: Date) => {
     setData(day);
     setShowDetails(true);
   };
+
+  console.log(latitude, longitude)
 
   const userContext = useContext(UserContext)
   const [open, setOpen] = useState(false);
@@ -64,13 +79,14 @@ const Dashboard: React.FC = () => {
   const category = 'success'
   const apiUrl = `https://api.api-ninjas.com/v1/quotes?category=${category}`
   const QUOTE_API_KEY = process.env.REACT_APP_QUOTE_API_KEY;
+  const WEATHER_API_KEY = process.env.REACT_APP_WEATHER_API_KEY
 
   const [quote, setQuote] = useState<Quote>({
     quote: '',
     author: '',
     category: ''
   });
-  
+
   const [quoteFetched, setQuoteFetched] = useState(false);
 
   const fetchQuote = async () => {
@@ -97,9 +113,40 @@ const Dashboard: React.FC = () => {
         await fetchQuote(); // Use 'await' here to wait for the recursive call to complete
       }
     } catch (error: any) {
-      console.error('Error: ', error.response ? error.response.data : error.message);
+      console.error('Error: quote impossible to fetch');
     }
   };
+
+  const fetchWeather = async () => {
+    try {
+      const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}&units=metric`)
+
+      setWeather({
+        city: response.data.name,
+        temp: response.data.main.temp,
+        icon: response.data.weather[0].icon
+      });
+    } catch (error: any) {
+      console.error('Error: Weather impossible to fetch');
+    }
+  };
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+      });
+    } else {
+      console.log("La géolocalisation n'est pas prise en charge par ce navigateur.");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (latitude !== null) {
+      fetchWeather()
+    }
+  }, [latitude]);
 
 
   return (
@@ -107,10 +154,26 @@ const Dashboard: React.FC = () => {
       <Layout>
         <div>
           <div className='quoteContainer'>
-            <p>Get a quote</p>
+            {weather.city ? (
+              <div className='weather'>
+                <p>
+                  {weather.city},
+                </p>
+                <p>
+                  {Math.floor(weather.temp)}°
+                </p>
+                <img src={`https://openweathermap.org/img/wn/${weather.icon}.png`} alt="Weather Icon" />
+              </div>
+            ) : (
+              <p>
+                Weather data not available
+              </p>
+            )}
+            <Tooltip title="Get a quote">
               <IconButton onClick={handleOpen}>
                 <LightbulbCircleIcon fontSize="large"></LightbulbCircleIcon>
               </IconButton>
+            </Tooltip>
           </div>
           <WeekCalendar showDetailsHandle={showDetailsHandle} />
           <Modal
@@ -120,24 +183,22 @@ const Dashboard: React.FC = () => {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-              <>
-                {!quoteFetched ? (
-                  <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'center' }}>
-                    <CircularProgress color="secondary" />
-                  </Box>
-                ) : (
-                  <>
-                    <Typography id="modal-modal-description" variant="body1" sx={{ fontStyle: 'italic' }}>
-                      "{quote.quote}"
+              {!quoteFetched ? (
+                <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'center' }}>
+                  <CircularProgress color="secondary" />
+                </Box>
+              ) : (
+                <>
+                  <Typography id="modal-modal-description" variant="body1" sx={{ fontStyle: 'italic' }}>
+                    "{quote.quote}"
+                  </Typography>
+                  {quote.author && (
+                    <Typography id="modal-modal-title" variant="body2" marginTop={2}>
+                      {quote.author}
                     </Typography>
-                    {quote.author && (
-                      <Typography id="modal-modal-title" variant="body2" marginTop={2}>
-                        {quote.author}
-                      </Typography>
-                    )}
-                  </>
-                )}
-              </>
+                  )}
+                </>
+              )}
             </Box>
           </Modal>
           <Stats></Stats>

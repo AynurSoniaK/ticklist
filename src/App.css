@@ -63,6 +63,16 @@ body {
     margin: 1rem 1.5rem 0 0;
 }
 
+.weather {
+    display: flex;
+    border-radius: 20px;
+    padding: 5px 10px
+}
+
+.weather p{
+    margin: 10px 0 0 0;
+}
+
 .quote {
     font-style: italic;
 }
