@@ -13,7 +13,6 @@ import { UserContext } from '../context/UserContext';
 type FormData = {
     email: string;
     password: string;
-    username: string;
 }
 
 function Register() {
@@ -23,7 +22,6 @@ function Register() {
     const initialFormData: FormData = {
         email: '',
         password: '',
-        username: '',
     };
 
     const [formData, setFormData] = useState<FormData>(initialFormData);
@@ -53,7 +51,7 @@ function Register() {
 
     const handleSignup = async () => {
 
-        if (!formData.email || !formData.password || !formData.username) return;
+        if (!formData.email || !formData.password ) return;
 
         const userCredential = await createUserWithEmailAndPassword(
             auth, formData.email, formData.password
@@ -64,21 +62,12 @@ function Register() {
         if (userCredential && user !== null) {
             try {
                 await updateProfile(user, {
-                    displayName: capitalize(formData.username),
-                    photoURL: "https://images.pexels.com/photos/4919373/pexels-photo-4919373.jpeg?auto=compress&cs=tinysrgb&w=1600"
+                    displayName: "",
+                    photoURL: ""
                 });
-                const email = user?.email || '';
-                const username = user?.displayName || '';
-                const photo = user?.photoURL || '';
-                // userContext.setUser({
-                //     email: email,
-                //     username: username,
-                //     photo: photo
-                //   })
                 setFormData({
                     email: '',
                     password: '',
-                    username: '',
                 })
                 navigate('/dashboard');
             } catch (error) {
@@ -105,20 +94,10 @@ function Register() {
                     Create your profile
                 </Typography>
                 <form>
+
                     <Box marginBottom={3}>
                         <TextField
-                            placeholder="SoniaK"
-                            variant="outlined"
-                            InputProps={{ sx: { borderRadius: 5 } }}
-                            value={formData.username}
-                            onChange={handleInputChange}
-                            name="username"
-                            autoComplete="off"
-                        />
-                    </Box>
-                    <Box marginBottom={3}>
-                        <TextField
-                            placeholder="soniak@gmail.com"
+                            placeholder="Email"
                             type="email"
                             variant="outlined"
                             InputProps={{ sx: { borderRadius: 5 } }}
@@ -130,7 +109,7 @@ function Register() {
                     </Box>
                     <Box marginBottom={3}>
                         <TextField
-                            placeholder="******"
+                            placeholder="Password"
                             type="password"
                             variant="outlined"
                             InputProps={{ sx: { borderRadius: 5 } }}

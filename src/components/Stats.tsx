@@ -21,7 +21,7 @@ const style = {
   color: "#707070"
 }
 
-export default function Stats() {
+const Stats:React.FC = () => {
   const userContext = useContext(UserContext)
   const [taskCompleted, setTaskCompleted] = useState<number>(0);
   const [taskWaiting, setTaskWaiting] = useState<number>(0);
@@ -83,3 +83,5 @@ export default function Stats() {
     </Box>
   )
 }
+
+export default Stats;
