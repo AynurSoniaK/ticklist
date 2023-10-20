@@ -59,9 +59,10 @@ const Dashboard: React.FC = () => {
     setShowDetails(true);
   };
 
-  console.log(latitude, longitude)
 
   const userContext = useContext(UserContext)
+  console.log(userContext,"userContext")
+
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {

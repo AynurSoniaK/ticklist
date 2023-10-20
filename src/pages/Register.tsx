@@ -15,7 +15,7 @@ type FormData = {
     password: string;
 }
 
-function Register() {
+const Register: React.FC = () => {
 
     const userContext = useContext(UserContext)
 

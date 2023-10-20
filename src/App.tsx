@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { UserContext, UserContextProvider } from './context/UserContext';
 import './App.css'
 import Home from './pages/Home'
@@ -8,28 +8,53 @@ import Dashboard from './pages/Dashboard'
 import Profile from './pages/profile'
 import TaskDetails from './pages/TaskDetails'
 import {
-  BrowserRouter,
   Routes,
   Route,
+  Navigate,
 } from "react-router-dom"
 
 function App(): JSX.Element {
 
+  const userContext = useContext(UserContext)
+
   return (
     <UserContextProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/taskDetails/:taskDetailsString" element={<TaskDetails />} />
-          {/* <Route path="/profile" element={token ? <Profile /> : <Login />} />
-      <Route path="/error" element={token ? <ErrorPage /> : <Login />} /> */}
-          <Route path="*" element={<Login />} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/signin" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            userContext.user ? (
+              <Dashboard />
+            ) : (
+              <Navigate to="/signin" replace />
+            )
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            userContext.user ? (
+              <Profile />
+            ) : (
+              <Navigate to="/signin" replace />
+            )
+          }
+        />
+        <Route
+          path="/taskDetails/:taskDetailsString"
+          element={
+            userContext.user ? (
+              <TaskDetails />
+            ) : (
+              <Navigate to="/signin" replace />
+            )
+          }
+        />
+        <Route path="*" element={<Register />} />
+      </Routes>
     </UserContextProvider>
   );
 }

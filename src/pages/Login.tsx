@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import LayoutNotLogged from '../components/LayoutNotLogged';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { UserContext } from '../context/UserContext';
 
-function Login() {
+const Login: React.FC = () => {
 
   const userContext = useContext(UserContext)
 
@@ -47,21 +47,13 @@ function Login() {
       const user = auth.currentUser;
 
       if (user) {
-        const email = user?.email || '';
-        const username = user?.displayName || '';
-        const photo = user?.photoURL || '';
-
-        // userContext.setUser({
-        //   email: email,
-        //   username: username,
-        //   photo: photo
-        // })
-        navigate('/dashboard');
+          navigate('/dashboard');
       }
     } catch (error) {
       console.error(error);
     }
   }
+
 
   return (
     <LayoutNotLogged>

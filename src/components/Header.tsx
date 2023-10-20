@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
+import { getAuth, onAuthStateChanged, updateProfile, signOut } from "firebase/auth";
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -54,8 +54,6 @@ const Header: React.FC = () => {
         photo: '',
     };
 
-    console.log(initialFormData)
-
     const [formData, setFormData] = useState<FormData>(initialFormData);
 
     const settings = ['Profile', 'Dashboard', 'Logout'];
@@ -64,7 +62,6 @@ const Header: React.FC = () => {
     const [user, setUser] = useState<UserType | null>(null);
     const [userReady, setUserReady] = useState<boolean>(false);
     const [userChanged, setUserChanged] = useState<boolean>(false);
-
 
     const [open, setOpen] = useState(false);
 
@@ -99,6 +96,14 @@ const Header: React.FC = () => {
     // };
 
     const auth = getAuth();
+
+    const handleSignOut = () => {
+        signOut(auth).then(() => {
+        navigate('/');
+        }).catch((error) => {
+            // An error happened.
+        });
+    };
 
     const handleUpdateUser = async () => {
 
@@ -210,8 +215,8 @@ const Header: React.FC = () => {
                                 </IconButton>
                                 <Box sx={{ display: "flex", alignItems: 'center', ml: '10px' }}>
                                     <Typography sx={{ fontSize: { xs: '20px', sm: '30px', md: '40px' } }} variant={'h3'} component={'h1'}>Hello, {userContext.user?.username ? userContext.user.username : "stranger"}.  </Typography>
-                                    <DriveFileRenameOutlineIcon onClick={handleOpen} sx={{ fontSize: { xs: '30px', md: '40px' }, marginLeft: "20px" }}></DriveFileRenameOutlineIcon>
-                                    <LogoutIcon sx={{ fontSize: { xs: '30px', md: '40px' }, marginLeft: "20px" }}></LogoutIcon>
+                                    <DriveFileRenameOutlineIcon onClick={handleOpen} sx={{ fontSize: { xs: '30px', md: '40px' }, marginLeft: "20px", cursor:"pointer" }}></DriveFileRenameOutlineIcon>
+                                    <LogoutIcon onClick={handleSignOut} sx={{ fontSize: { xs: '30px', md: '40px' }, marginLeft: "20px", cursor:"pointer" }}></LogoutIcon>
                                 </Box>
                             </>
                         ) :
