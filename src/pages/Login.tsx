@@ -73,7 +73,7 @@ const Login: React.FC = () => {
         <form>
           <Box marginBottom={3}>
             <TextField
-              placeholder="soniak@gmail.com"
+              placeholder="Email"
               type="email"
               variant="outlined"
               InputProps={{ sx: { borderRadius: 5 } }}
@@ -85,7 +85,7 @@ const Login: React.FC = () => {
           </Box>
           <Box marginBottom={3}>
             <TextField
-              placeholder="******"
+              placeholder="Password"
               type="password"
               variant="outlined"
               InputProps={{ sx: { borderRadius: 5 } }}

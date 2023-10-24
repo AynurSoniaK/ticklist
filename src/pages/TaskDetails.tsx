@@ -40,7 +40,6 @@ const TaskDetails: React.FC = () => {
                     ...taskDetailsParam,
                     dueDate: formattedDueDate,
                 };
-                console.log(updatedTaskDetails)
                 setTaskDetails(updatedTaskDetails);
             } catch (error) {
                 console.error('Error parsing taskDetailsString:', error);
@@ -124,7 +123,7 @@ const TaskDetails: React.FC = () => {
                                     placeholder="Add a note ?"
                                     type="note"
                                     variant="outlined"
-                                    InputProps={{ sx: { borderRadius: 5 } }}
+                                    InputProps={{ sx: { borderRadius: 5, width: '100%', height: '150px', alignItems: 'start' } }}
                                     value={taskDetails.note}
                                     onChange={handleInputChange}
                                     name="note"

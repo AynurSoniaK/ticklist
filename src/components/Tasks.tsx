@@ -32,7 +32,7 @@ const style = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  p: 2,
   borderRadius: '20px',
   textAlign: "center"
 };
@@ -270,7 +270,7 @@ const Tasks: React.FC = () => {
                     placeholder="Add a note ?"
                     type="note"
                     variant="outlined"
-                    InputProps={{ sx: { borderRadius: 5 } }}
+                    InputProps={{ sx: { borderRadius: 5, width: '100%', height: '150px', alignItems: 'start' } }}
                     value={formTask.note}
                     onChange={handleInputChange}
                     name="note"

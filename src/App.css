@@ -1,3 +1,9 @@
+html {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 body {
     margin: 20px;
     padding: 0;
@@ -8,7 +14,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    max-height: 100vh;
 }
 
 .button-gradient {
